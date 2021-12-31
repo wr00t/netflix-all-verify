@@ -158,8 +158,10 @@ func NF(url string) (bool, string) {
 				if UnblockTest(SelfMadeAvailableID, ipv4) {
 					testURL2 := Netflix + strconv.Itoa(SelfMadeAvailableID)
 					ipv4CountryCode2 := RequestIP(testURL2, ipv4)
-					ip := "NF库识别的IP地域信息：" + FindCountry(ipv4CountryCode2) + "区(" + strings.ToUpper(strings.Split(ipv4CountryCode2, "-")[0]) + ") NetFlix 非原生IP"
-					return false, "您的出口IP不能解锁Netflix，仅支持自制剧的观看\n" + ip
+					//ip := "NF库识别的IP地域信息：" + FindCountry(ipv4CountryCode2) + "区(" + strings.ToUpper(strings.Split(ipv4CountryCode2, "-")[0]) + ") NetFlix 非原生IP"
+					ip := FindCountry(ipv4CountryCode2) + "区(" + strings.ToUpper(strings.Split(ipv4CountryCode2, "-")[0]) + ") | NetFlix 非原生IP"
+					//return false, "您的出口IP不能解锁Netflix，仅支持自制剧的观看\n" + ip
+					return false, ip
 					//支持自制剧
 				} else {
 					//不支持自制剧
@@ -171,8 +173,10 @@ func NF(url string) (bool, string) {
 			}
 		} else {
 			//如果支持非自制剧的解锁，则直接跳过自制剧的解锁
-			ip := "原生IP地域解锁信息：" + FindCountry(ipv4CountryCode) + "区(" + strings.ToUpper(strings.Split(ipv4CountryCode, "-")[0]) + ") NetFlix 原生IP"
-			return true, "您的出口IP完整解锁Netflix，支持非自制剧的观看\n" + ip
+			//ip := "原生IP地域解锁信息：" + FindCountry(ipv4CountryCode) + "区(" + strings.ToUpper(strings.Split(ipv4CountryCode, "-")[0]) + ") NetFlix 原生IP"
+			ip := FindCountry(ipv4CountryCode) + "区(" + strings.ToUpper(strings.Split(ipv4CountryCode, "-")[0]) + ") | NetFlix 原生IP"
+			//return true, "您的出口IP完整解锁Netflix，支持非自制剧的观看\n" + ip
+			return true, ip
 		}
 	}
 	return false, ""
