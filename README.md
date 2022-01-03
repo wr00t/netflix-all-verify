@@ -1,17 +1,24 @@
 # netflix-all-verify
 
-NetFlix批量检测,golang编写
+NetFlix 批量检测，golang 编写
 
-Netflix的大规模封锁,网上的Netflix检测脚本只有本地检测的功能, 因而诞生了本项目
+Netflix 的大规模封锁,网上的 Netflix 检测脚本只有本地检测的功能, 因而诞生了本项目
 
-本项目基于[netflix-verify](https://github.com/sjlleo/netflix-verify) 修改,增加了对批量检测的功能
+本项目基于 [netflix-verify](https://github.com/sjlleo/netflix-verify) 修改,增加了对批量检测的功能
 
 ## 使用方法
 
-在终端运行 netflix-all-verify后输入clash的订阅地址
+1. 源码运行（已经存在 go 运行环境）
 
+克隆源码，在终端运行：
 ```bash
-./netflix-all-verify
+$ go run main.go 'clash 订阅 url'
+```
+2. 使用编译好的程序运行
+
+从 [Releases](https://github.com/wr00t/netflix-all-verify/releases/latest) 页面下载编译好的程序，在终端运行：
+```bash
+./netflix-all-verify 'clash 订阅 url'
 ```
 
 ## 未来工作
