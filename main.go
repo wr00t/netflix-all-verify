@@ -71,6 +71,7 @@ func downloadConfig(urlConfig string) {
 	}
 	exPath = filepath.Dir(ex)
 	fmt.Println(exPath)
+
 	//输入订阅链接
 	//fmt.Println("请输入clash订阅链接(非clash订阅请进行订阅转换)")
 	//var urlConfig string
@@ -79,7 +80,18 @@ func downloadConfig(urlConfig string) {
 	//	panic(err)
 	//}
 	//下载配置信息
-	res, err := h.Get(urlConfig)
+	//res, err := h.Get(urlConfig)
+
+	// 使用 ClashX 的 User-Agent 下载配置信息
+	client := &h.Client{}
+	req, err := h.NewRequest("GET", urlConfig, nil)
+	req.Header.Add("User-Agent", "ClashX/1.72.0 (com.west2online.ClashX; build:1.72.0; macOS 12.1.0) Alamofire/5.4.4")
+	parseFormErr := req.ParseForm()
+	if parseFormErr != nil {
+		fmt.Println(parseFormErr)
+	}
+
+	res, err := client.Do(req)
 	if err != nil {
 		fmt.Println("clash 的订阅链接下载失败！")
 		time.Sleep(10 * time.Second)
@@ -116,7 +128,7 @@ func main() {
 	if urlConfig == "-h" {
 		fmt.Println("请输入 clash 订阅链接(非 clash 订阅请进行订阅转换)")
 		fmt.Println(fmt.Sprintf("输入格式: %s %s", os.Args[0], "'clash 订阅链接地址'"))
-		os.Exit(0)
+		os.Exit(1)
 	}
 	downloadConfig(urlConfig)
 
