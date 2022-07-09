@@ -3,13 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-<<<<<<< HEAD
-	"github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/hub/executor"
-	"github.com/Dreamacro/clash/listener/http"
-	"github.com/axgle/mahonia" //编码转换
-=======
->>>>>>> 2f9c6e914be12ca9b3c2df50fc82c97a598be40a
 	"io"
 	"io/ioutil"
 	"net"
@@ -73,36 +66,21 @@ func GetAvailablePort() (int, error) {
 
 }
 
-func downloadConfig(urlConfig string) {
+func downloadConfig() {
 	ex, err := os.Executable()
 	if err != nil {
 		panic(err)
 	}
 	exPath = filepath.Dir(ex)
 	fmt.Println(exPath)
-
 	//输入订阅链接
-	//fmt.Println("请输入clash订阅链接(非clash订阅请进行订阅转换)")
-	//var urlConfig string
-	//_, err = fmt.Scanln(&urlConfig)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//下载配置信息
-<<<<<<< HEAD
-	//res, err := h.Get(urlConfig)
-
-	// 使用 ClashX 的 User-Agent 下载配置信息
-	client := &h.Client{}
-	req, err := h.NewRequest("GET", urlConfig, nil)
-	req.Header.Add("User-Agent", "ClashX/1.72.0 (com.west2online.ClashX; build:1.72.0; macOS 12.1.0) Alamofire/5.4.4")
-	parseFormErr := req.ParseForm()
-	if parseFormErr != nil {
-		fmt.Println(parseFormErr)
+	fmt.Println("请输入clash订阅链接(非clash订阅请进行订阅转换)")
+	var urlConfig string
+	_, err = fmt.Scanln(&urlConfig)
+	if err != nil {
+		panic(err)
 	}
-
-	res, err := client.Do(req)
-=======
+	//下载配置信息
 	client := &h.Client{
 		Timeout: 2 * time.Second,
 	}
@@ -115,9 +93,8 @@ func downloadConfig(urlConfig string) {
 		panic(err)
 	}
 	// res, err := h.Get(urlConfig)
->>>>>>> 2f9c6e914be12ca9b3c2df50fc82c97a598be40a
 	if err != nil {
-		fmt.Println("clash 的订阅链接下载失败！")
+		fmt.Println("clash的订阅链接下载失败！")
 		time.Sleep(10 * time.Second)
 		return
 	}
@@ -136,8 +113,7 @@ func downloadConfig(urlConfig string) {
 		}
 	}(f)
 	if err != nil {
-		fmt.Println("clash 的订阅链接下载失败！请输入 clash 订阅链接(非 clash 订阅请进行订阅转换)")
-		os.Exit(1)
+		fmt.Println("clash的订阅链接下载失败！")
 		time.Sleep(10 * time.Second)
 		return
 	}
@@ -148,13 +124,7 @@ func downloadConfig(urlConfig string) {
 }
 
 func main() {
-	var urlConfig string = os.Args[1]
-	if urlConfig == "-h" {
-		fmt.Println("请输入 clash 订阅链接(非 clash 订阅请进行订阅转换)")
-		fmt.Println(fmt.Sprintf("输入格式: %s %s", os.Args[0], "'clash 订阅链接地址'"))
-		os.Exit(1)
-	}
-	downloadConfig(urlConfig)
+	downloadConfig()
 
 	//解析配置信息
 	config, err := executor.ParseWithPath(exPath + "/config.yaml")
@@ -197,16 +167,16 @@ func main() {
 	f, err := os.OpenFile(exPath+"/netflix.txt", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0666)
 	defer f.Close()
 	if err != nil {
-		fmt.Println("新建 netflix.txt失败：", err)
+		fmt.Println("新建netflix.txt失败：", err)
 	}
 
-	// 创建 Excel
-	//excel := excelize.NewFile()
-	//excel.SetCellValue("Sheet1", "A1", "节点名")
-	//excel.SetCellValue("Sheet1", "B1", "ip地址")
-	//excel.SetCellValue("Sheet1", "C1", "复用次数")
-	//excel.SetCellValue("Sheet1", "D1", "是否解锁")
-	//excel.SetCellValue("Sheet1", "E1", "详细说明")
+	//创建excel
+	excel := excelize.NewFile()
+	excel.SetCellValue("Sheet1", "A1", "节点名")
+	excel.SetCellValue("Sheet1", "B1", "ip地址")
+	excel.SetCellValue("Sheet1", "C1", "复用次数")
+	excel.SetCellValue("Sheet1", "D1", "是否解锁")
+	excel.SetCellValue("Sheet1", "E1", "详细说明")
 
 	index := 1
 	nodes := config.Proxies
@@ -222,17 +192,11 @@ func main() {
 		}
 		proxy = server
 		//落地机IP
-		//ip := getIP()
-		//str := fmt.Sprintf("%d   节点名: %s ip地址:%s\n", index, node, ip)
-		str := fmt.Sprintf("%d | %s | ", index, node)
+		ip := getIP()
+		str := fmt.Sprintf("%d   节点名: %s - ip地址:%s - ", index, node, ip)
 		fmt.Print(str)
 
 		//Netflix检测
-<<<<<<< HEAD
-		_, out := nf.NF("http://" + proxyUrl)
-		if out == "" {
-			out = "完全不支持 Netflix"
-=======
 		r := verify.NewVerify(verify.Config{
 			Proxy: "http://" + proxyUrl,
 		})
@@ -249,21 +213,10 @@ func main() {
 		default:
 			unblock = false
 			res = "网络异常"
->>>>>>> 2f9c6e914be12ca9b3c2df50fc82c97a598be40a
 		}
 
 		fmt.Fprintln(f, enc.ConvertString(str+res))
 
-<<<<<<< HEAD
-		// 创建 Excel
-		//excel.SetCellValue("Sheet1", "A"+strconv.Itoa(index+1), node)
-		//excel.SetCellValue("Sheet1", "B"+strconv.Itoa(index+1), ip)
-		//if ip != "" {
-		//	excel.SetCellFormula("Sheet1", "C"+strconv.Itoa(index+1), "= COUNTIF(B:B,B"+strconv.Itoa(index+1)+")")
-		//}
-		//excel.SetCellValue("Sheet1", "D"+strconv.Itoa(index+1), ok)
-		//excel.SetCellValue("Sheet1", "E"+strconv.Itoa(index+1), out)
-=======
 		excel.SetCellValue("Sheet1", "A"+strconv.Itoa(index+1), node)
 		excel.SetCellValue("Sheet1", "B"+strconv.Itoa(index+1), ip)
 		if ip != "" {
@@ -271,21 +224,11 @@ func main() {
 		}
 		excel.SetCellValue("Sheet1", "D"+strconv.Itoa(index+1), unblock)
 		excel.SetCellValue("Sheet1", "E"+strconv.Itoa(index+1), res)
->>>>>>> 2f9c6e914be12ca9b3c2df50fc82c97a598be40a
 
 		index++
-		// 测试代码时只循环一次
-		//break
 	}
-<<<<<<< HEAD
-	//  创建 Excel
-	//if err := excel.SaveAs(exPath + "/Netflix.xlsx"); err != nil {
-	//	fmt.Println(err)
-	//}
-=======
 
 	if err := excel.SaveAs(exPath + "/Netflix.xlsx"); err != nil {
 		fmt.Println(err)
 	}
->>>>>>> 2f9c6e914be12ca9b3c2df50fc82c97a598be40a
 }
