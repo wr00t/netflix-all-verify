@@ -193,7 +193,7 @@ func main() {
 		proxy = server
 		//落地机IP
 		ip := getIP()
-		str := fmt.Sprintf("%d   节点名: %s - ip地址:%s - ", index, node, ip)
+		str := fmt.Sprintf("\r%d   节点名: %s - ip地址:%s - ", index, node, ip)
 		fmt.Print(str)
 
 		//Netflix检测
